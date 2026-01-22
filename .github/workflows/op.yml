@@ -91,7 +91,12 @@ jobs:
       run: |
         cd $SOURCE_NAME
         case $REPO_BRANCH in
-          openwrt-25.12)
+          24.10)
+            _release_tag=$(git tag --sort=taggerdate --list 'v24.*' | tail -1)
+            git checkout $_release_tag
+            _prerelease=false
+            ;;
+          25.12)
             _release_tag=$(git tag --sort=taggerdate --list 'v25.*' | tail -1)
             git checkout $_release_tag
             _prerelease=false
@@ -100,7 +105,7 @@ jobs:
             echo "Can't get local/upstream's branch/tags"
             ;;
         esac
-        echo "release_tag=$_release_tag" >> $GITHUB_ENV  
+        echo "release_tag=$_release_tag" >> $GITHUB_ENV
         
     - name: 取回缓存 staging_dir
       uses: actions/cache@v4
