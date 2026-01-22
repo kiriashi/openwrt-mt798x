@@ -136,7 +136,4 @@ echo "  _______                     ________        __" >> package/base-files/fi
 echo " |       |.-----.-----.-----.|  |  |  |.----.|  |_" >> package/base-files/files/etc/banner
 echo " |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|" >> package/base-files/files/etc/banner
 echo " |_______||   __|_____|__|__||________||__|  |____|" >> package/base-files/files/etc/banner
-echo "          |__|" >> package/base-files/files/etc/banner
-echo " -----------------------------------------------------" >> package/base-files/files/etc/banner
-echo "         %D ${date} by $OP_author                     " >> package/base-files/files/etc/banner
-echo " -----------------------------------------------------" >> package/base-files/files/etc/banner
+echo "          |__|   ${date} by $OP_author" >> package/base-files/files/etc/banner
