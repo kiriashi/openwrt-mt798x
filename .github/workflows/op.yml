@@ -17,7 +17,7 @@ on:
       CUSTOM_PLUGINS:
         description: '自定义插件名称，用空格分隔'
         required: false
-        default: 'luci-theme-aurora luci-app-ttyd luci-app-diskman'
+        default: 'luci-theme-aurora'
         type: string
 
 env:
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        device: [ "rax3000m-emmc" ]
+        device: ["rax3000m-emmc"]
         source: ["openwrt"]
         include:
           - device: "rax3000m-emmc"
@@ -77,8 +77,8 @@ jobs:
         echo "CUSTOM_PLUGINS=${{ github.event.inputs.CUSTOM_PLUGINS }}" >> $GITHUB_ENV
         echo "DEVICE_NAME=${{ matrix.device }}" >> $GITHUB_ENV
         echo "SOURCE_NAME=${{ matrix.source }}" >> $GITHUB_ENV
-        echo "REPO_URL=https://github.com/openwrt/openwrt" >> $GITHUB_ENV
-        echo "REPO_BRANCH=25.12" >> $GITHUB_ENV
+        echo "REPO_URL=https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/shiyu1314/openwrt-source" >> $GITHUB_ENV
+        echo "REPO_BRANCH=openwrt-25.12" >> $GITHUB_ENV
 
     - name: 克隆源代码
       working-directory: /workdir
@@ -91,12 +91,7 @@ jobs:
       run: |
         cd $SOURCE_NAME
         case $REPO_BRANCH in
-          24.10)
-            _release_tag=$(git tag --sort=taggerdate --list 'v24.*' | tail -1)
-            git checkout $_release_tag
-            _prerelease=false
-            ;;
-          25.12)
+          openwrt-25.12)
             _release_tag=$(git tag --sort=taggerdate --list 'v25.*' | tail -1)
             git checkout $_release_tag
             _prerelease=false
@@ -105,7 +100,7 @@ jobs:
             echo "Can't get local/upstream's branch/tags"
             ;;
         esac
-        echo "release_tag=$_release_tag" >> $GITHUB_ENV
+        echo "release_tag=$_release_tag" >> $GITHUB_ENV  
         
     - name: 取回缓存 staging_dir
       uses: actions/cache@v4
